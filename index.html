@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Three-Round Encounter Lab — D&D 2024</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <style>
 :root{color-scheme:dark;--bg:#10141b;--panel:#191f29;--panel2:#202938;--line:#303b4c;--text:#edf2f8;--muted:#aab6c7;--accent:#d8a85d;--blue:#7bb7ff;--red:#ff8e8e;--green:#8ed5ac}
 *{box-sizing:border-box}body{margin:0;background:linear-gradient(145deg,#10141b,#151c26 60%,#111720);color:var(--text);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
@@ -15,7 +16,7 @@ input,select,textarea{background:#101720;color:var(--text);border:1px solid #3a4
 input:focus,select:focus,textarea:focus{outline:2px solid #6e94c5;border-color:transparent}label{display:block;font-size:.8rem;color:var(--muted);margin-bottom:4px}.field{min-width:0}.grid{display:grid;gap:10px}.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g4{grid-template-columns:repeat(4,minmax(0,1fr))}.g5{grid-template-columns:repeat(5,minmax(0,1fr))}
 .panel{background:rgba(25,31,41,.96);border:1px solid var(--line);border-radius:14px;padding:16px;margin:0 0 16px;box-shadow:0 10px 25px #00000012}.muted{color:var(--muted);font-size:.88rem}.eyebrow{font-size:.73rem;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);font-weight:700;margin-bottom:5px}
 #roster{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,350px),1fr));gap:14px}.combatant{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:14px}.combatant.party{border-top:3px solid var(--blue)}.combatant.monster{border-top:3px solid var(--red)}.combatant-head{display:flex;justify-content:space-between;gap:10px;align-items:start}.side-tag{font-size:.72rem;border:1px solid var(--line);border-radius:99px;padding:3px 8px;color:var(--muted)}.attacks{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}.attack{background:#111720;border:1px solid #2b3544;border-radius:9px;padding:10px;margin:8px 0}.attack-top{display:flex;justify-content:space-between;align-items:center;gap:8px}.attack-title{font-weight:700}.attack-meta{font-size:.8rem;color:var(--muted)}.round-pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.round-pills span{font-size:.76rem;padding:3px 7px;border-radius:6px;background:#263244;color:#dce8f8}.round-pills .off{opacity:.45;text-decoration:line-through}
-.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.stat{background:#111720;border:1px solid var(--line);padding:12px;border-radius:10px}.stat .value{font-size:1.55rem;font-weight:750;letter-spacing:-.03em}.stat .label{font-size:.78rem;color:var(--muted)}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:620px}th,td{text-align:right;padding:10px;border-bottom:1px solid var(--line);white-space:nowrap}th:first-child,td:first-child{text-align:left}th{color:var(--muted);font-size:.78rem;font-weight:600}.party-text{color:var(--blue)}.monster-text{color:var(--red)}.warning{border-left:3px solid var(--accent);padding:10px 12px;background:#2b251c;border-radius:0 8px 8px 0;color:#f2dfbf;margin-top:10px}.good{color:var(--green)}.bad{color:var(--red)}.bar{height:8px;background:#303947;border-radius:20px;overflow:hidden;margin-top:8px}.bar>div{height:100%;background:var(--accent);width:0%}.subhead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}.hidden{display:none!important}.footnote{font-size:.82rem;color:var(--muted);margin-top:12px}.empty{padding:24px;text-align:center;border:1px dashed var(--line);border-radius:12px;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.stat{background:#111720;border:1px solid var(--line);padding:12px;border-radius:10px}.stat .value{font-size:1.55rem;font-weight:750;letter-spacing:-.03em}.stat .label{font-size:.78rem;color:var(--muted)}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:620px}th,td{text-align:right;padding:10px;border-bottom:1px solid var(--line);white-space:nowrap}th:first-child,td:first-child{text-align:left}th{color:var(--muted);font-size:.78rem;font-weight:600}.party-text{color:var(--blue)}.monster-text{color:var(--red)}.warning{border-left:3px solid var(--accent);padding:10px 12px;background:#2b251c;border-radius:0 8px 8px 0;color:#f2dfbf;margin-top:10px}.good{color:var(--green)}.bad{color:var(--red)}.bar{height:8px;background:#303947;border-radius:20px;overflow:hidden;margin-top:8px}.bar>div{height:100%;background:var(--accent);width:0%}.subhead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}.hidden{display:none!important}.footnote{font-size:.82rem;color:var(--muted);margin-top:12px}.empty{padding:24px;text-align:center;border:1px dashed var(--line);border-radius:12px;color:var(--muted)}.library-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:14px}.library-item{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid var(--line);background:#111720;border-radius:9px;padding:10px;margin:8px 0}.library-item .meta{font-size:.8rem;color:var(--muted)}.library-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.statusline{font-size:.86rem;color:var(--muted);margin-top:8px}
 dialog{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:14px;width:min(700px,calc(100% - 24px));padding:20px;max-height:90vh;overflow:auto}dialog::backdrop{background:#000a}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}.checkrow{display:flex;gap:8px;align-items:center}.checkrow input{width:auto}.tiny{font-size:.76rem}
 @media(max-width:650px){.g2,.g3,.g4,.g5{grid-template-columns:repeat(2,minmax(0,1fr))}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}main{padding:14px 10px 40px}.panel{padding:13px}}
 </style>
@@ -45,7 +46,16 @@ dialog{background:var(--panel);color:var(--text);border:1px solid var(--line);bo
       <label class="filebtn">Import JSON<input id="importFile" type="file" accept=".json,application/json" hidden></label>
       <button id="resetBtn" class="danger">Clear encounter</button>
     </div>
-    <p class="footnote">Import supports this tool's JSON export. D&amp;D Beyond has no universal, guaranteed character-export format; use the manual editor to copy the relevant stats from a character sheet. Monster URL import tries direct access first; if browser security blocks it, paste the visible stat block text. This local HTML cannot bypass D&amp;D Beyond access controls or cross-origin restrictions.</p>
+    <p class="footnote">Characters are imported from D&amp;D Beyond PDF exports. Monsters are added by pasting their stat block text. Saved characters and monsters are kept in this browser on this device; use Export JSON to back up encounters. The saved library does not automatically sync to other devices or users.</p>
+  </section>
+
+  <section class="panel" id="libraryPanel">
+    <div class="subhead"><div><h2>Saved library</h2><p class="muted">Keep character sheets and previously added monsters here. Add them to or remove them from an encounter whenever you like.</p></div><span class="side-tag" id="libraryCount">0 saved</span></div>
+    <div class="library-grid">
+      <div><h3>Characters</h3><div id="characterLibrary"></div><p class="muted">Import a character PDF once, then reuse the saved stats in future encounters.</p></div>
+      <div><h3>Monsters</h3><div id="monsterLibrary"></div><p class="muted">Paste each monster stat block once. It remains in your library for future encounters.</p></div>
+    </div>
+    <p class="footnote">Privacy note: the library is stored in this browser's local storage. Clearing browser data or switching browsers/devices may remove or hide it. A future cloud-sync version would need a backend and user accounts.</p>
   </section>
 
   <section class="panel">
@@ -132,24 +142,25 @@ dialog{background:var(--panel);color:var(--text);border:1px solid var(--line);bo
 </dialog>
 
 <dialog id="charImportDialog">
-  <div class="eyebrow">D&amp;D Beyond character import</div>
-  <h2>Import a character sheet</h2>
-  <div class="field"><label for="charUrl">D&amp;D Beyond character URL</label><input id="charUrl" type="url" placeholder="https://www.dndbeyond.com/characters/..."></div>
-  <div class="toolbar"><button class="primary" id="tryCharFetch">Try URL import</button><button id="closeCharImport">Close</button></div>
-  <p class="muted">A public URL may still be blocked by browser cross-origin security. If that happens, copy the character sheet's visible text and paste it below. Imported attacks are best-effort estimates; check class features, magic items, limited-use powers and spell effects before relying on the result.</p>
-  <div class="field"><label for="charText">Character sheet text (fallback)</label><textarea id="charText" rows="10" placeholder="Character name, Armor Class, Hit Points, Initiative, attacks and spell statistics..."></textarea></div>
-  <div class="modal-actions"><button class="primary" id="parseCharText">Parse and preview</button></div>
+  <div class="eyebrow">Character PDF import</div>
+  <h2>Import a character sheet PDF</h2>
+  <p class="muted">Export the character sheet from D&amp;D Beyond as a PDF, then choose the file here. The browser extracts its text and attempts to identify name, AC, HP, initiative and common attacks. Review everything before saving.</p>
+  <div class="field"><label for="charPdfFile">Character sheet PDF</label><input id="charPdfFile" type="file" accept="application/pdf,.pdf"></div>
+  <div class="toolbar"><button class="primary" id="readCharPdf">Read PDF and preview</button><button id="closeCharImport">Close</button></div>
   <div id="charPreview" class="warning hidden"></div>
+  <div class="modal-actions hidden" id="charImportActions"><button id="saveCharLibrary">Save to character library</button><button class="primary" id="saveAddChar">Save and add to encounter</button></div>
 </dialog>
 <dialog id="ddbDialog">
-  <div class="eyebrow">D&amp;D Beyond import</div>
-  <h2>Import a monster stat block</h2>
-  <div class="field"><label for="ddbUrl">Public D&amp;D Beyond monster URL</label><input id="ddbUrl" type="url" placeholder="https://www.dndbeyond.com/monsters/5195047-goblin-boss"></div>
-  <div class="toolbar"><button class="primary" id="tryDdbFetch">Try URL import</button><button id="closeDdb">Close</button></div>
-  <p class="muted">If direct retrieval is blocked by browser security, copy the visible monster stat block from D&amp;D Beyond and paste it below. The parser uses the text you provide and shows a review before adding it.</p>
-  <div class="field"><label for="ddbText">Pasted stat block text (fallback)</label><textarea id="ddbText" rows="10" placeholder="Goblin Boss&#10;AC 17&#10;HP 21 (6d6)&#10;..."></textarea></div>
-  <div class="modal-actions"><button class="primary" id="parseDdbText">Parse and preview</button></div>
+  <div class="eyebrow">Monster stat block import</div>
+  <h2>Add a monster from copied text</h2>
+  <p class="muted">Copy the monster's visible stat block from a source you can access and paste it below. The parser tries to extract AC, HP and common attack entries. Review the result, then save it to your library for reuse.</p>
+  <div class="field"><label for="ddbText">Pasted monster stat block</label><textarea id="ddbText" rows="12" placeholder="Goblin Boss
+AC 17
+HP 21 (6d6)
+..." ></textarea></div>
+  <div class="toolbar"><button class="primary" id="parseDdbText">Parse and preview</button><button id="closeDdb">Close</button></div>
   <div id="ddbPreview" class="warning hidden"></div>
+  <div class="modal-actions hidden" id="monsterImportActions"><button id="saveMonsterLibrary">Save to monster library</button><button class="primary" id="saveAddMonster">Save and add to encounter</button></div>
 </dialog>
 
 <script>
@@ -157,6 +168,8 @@ dialog{background:var(--panel);color:var(--text);border:1px solid var(--line);bo
 'use strict';
 const $=id=>document.getElementById(id);
 let combatants=[], nextId=1, nextAttackId=1;
+let characterLibrary=[], monsterLibrary=[], pendingCharacter=null, pendingDdbMonster=null;
+const LIBRARY_KEY="encounterLabLibrary2024";
 const fmt=n=>Number.isFinite(n)?(Math.round(n*10)/10).toLocaleString(undefined,{maximumFractionDigits:1}):'—';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function parseDice(expr){
@@ -281,8 +294,8 @@ function duplicateCombatant(id){
   const copy={...JSON.parse(JSON.stringify(source)),id:nextId++,name:`${baseName} (${sameName+1})`,attacks:source.attacks.map(a=>({...a,id:nextAttackId++}))};
   combatants.push(copy);persist();render();
 }
-function persist(){try{localStorage.setItem('encounterLab2024',JSON.stringify({combatants,nextId,nextAttackId,partyAC:$('partyAC').value,partySave:$('partySave').value,monsterAC:$('monsterAC').value,monsterSave:$('monsterSave').value}))}catch(e){}}
-function loadSaved(){try{const d=JSON.parse(localStorage.getItem('encounterLab2024')||'null');if(d){combatants=d.combatants||[];nextId=d.nextId||1;nextAttackId=d.nextAttackId||1;for(const k of ['partyAC','partySave','monsterAC','monsterSave'])if(d[k]!=null)$(k).value=d[k]}}catch(e){}}
+function persist(){try{localStorage.setItem('encounterLab2024',JSON.stringify({combatants,nextId,nextAttackId,partyAC:$('partyAC').value,partySave:$('partySave').value,monsterAC:$('monsterAC').value,monsterSave:$('monsterSave').value}));localStorage.setItem(LIBRARY_KEY,JSON.stringify({characterLibrary,monsterLibrary}))}catch(e){}}
+function loadSaved(){try{const d=JSON.parse(localStorage.getItem('encounterLab2024')||'null');if(d){combatants=d.combatants||[];nextId=d.nextId||1;nextAttackId=d.nextAttackId||1;for(const k of ['partyAC','partySave','monsterAC','monsterSave'])if(d[k]!=null)$(k).value=d[k]}const lib=JSON.parse(localStorage.getItem(LIBRARY_KEY)||'null');if(lib){characterLibrary=lib.characterLibrary||[];monsterLibrary=lib.monsterLibrary||[]}}catch(e){}}
 function editCombatant(id=null){
   const c=combatants.find(x=>x.id===id);
   $('dialogTitle').textContent=c?'Edit combatant':'Add combatant';$('editId').value=c?c.id:'';
@@ -368,11 +381,25 @@ function parseCharacterText(text,url){
   $('charPreview').classList.remove('hidden');$('charPreview').textContent=`Preview: ${c.name} — AC ${c.ac}, HP ${c.hp}, initiative ${c.init}; ${c.attacks.length} attack(s) detected. Add missing attacks manually and verify all imported values.`;
   return c;
 }
-let pendingCharacter=null;
-$('ddbCharImportBtn').onclick=()=>{$('charUrl').value='';$('charText').value='';$('charPreview').classList.add('hidden');pendingCharacter=null;$('charImportDialog').showModal()};
+$('pdfCharImportBtn').onclick=()=>{$('charPdfFile').value='';$('charPreview').classList.add('hidden');$('charImportActions').classList.add('hidden');pendingCharacter=null;$('charImportDialog').showModal()};
 $('closeCharImport').onclick=()=>$('charImportDialog').close();
-$('tryCharFetch').onclick=async()=>{const url=$('charUrl').value.trim();if(!/^https:\/\/www\.dndbeyond\.com\/characters\//i.test(url)){alert('Enter a D&D Beyond character URL, such as https://www.dndbeyond.com/characters/12345678');return}try{const res=await fetch(url,{mode:'cors'});if(!res.ok)throw Error('HTTP '+res.status);const doc=new DOMParser().parseFromString(await res.text(),'text/html');const txt=doc.body?.innerText||doc.body?.textContent||'';$('charText').value=txt;pendingCharacter=parseCharacterText(txt,url)}catch(err){$('charPreview').classList.remove('hidden');$('charPreview').textContent='Direct URL import was blocked or unavailable ('+err.message+'). Copy the visible character sheet text and paste it below, then choose Parse and preview.'}};
-$('parseCharText').onclick=()=>{try{pendingCharacter=parseCharacterText($('charText').value,$('charUrl').value.trim()||'https://www.dndbeyond.com/characters/imported');const add=document.createElement('button');add.className='primary';add.textContent='Add character to encounter';add.style.marginTop='10px';add.onclick=()=>{combatants.push(pendingCharacter);pendingCharacter=null;$('charImportDialog').close();render()};const prev=$('charPreview');prev.querySelector('button')?.remove();prev.appendChild(add)}catch(err){$('charPreview').classList.remove('hidden');$('charPreview').textContent=err.message}};
+$('readCharPdf').onclick=async()=>{
+  const file=$('charPdfFile').files[0];if(!file){alert('Choose a character sheet PDF first.');return}
+  if(!window.pdfjsLib){$('charPreview').classList.remove('hidden');$('charPreview').textContent='The PDF reader could not load. Check your internet connection and reload the page, then try again.';return}
+  try{
+    pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    const bytes=await file.arrayBuffer(),pdf=await pdfjsLib.getDocument({data:bytes}).promise;let text='';
+    for(let pageNo=1;pageNo<=pdf.numPages;pageNo++){const page=await pdf.getPage(pageNo),content=await page.getTextContent();text+=content.items.map(x=>x.str).join(' ')+'\n'}
+    pendingCharacter=parseCharacterText(text,file.name);
+    pendingCharacter.sourceFileName=file.name;
+    $('charPreview').classList.remove('hidden');$('charPreview').textContent=`Preview: ${pendingCharacter.name} — AC ${pendingCharacter.ac}, HP ${pendingCharacter.hp}, initiative ${pendingCharacter.init}; ${pendingCharacter.attacks.length} attack(s) detected from ${pdf.numPages} page(s). Check stats and attacks; PDF layouts vary and some abilities may need manual entry.`;
+    $('charImportActions').classList.remove('hidden');
+  }catch(err){$('charPreview').classList.remove('hidden');$('charImportActions').classList.add('hidden');$('charPreview').textContent='Could not read this PDF: '+err.message+'. Make sure it is a text-based character sheet PDF, not just scanned images.'}
+};
+function cloneForEncounter(source,side){const c=JSON.parse(JSON.stringify(source));c.id=nextId++;c.side=side||c.side;c.attacks=(c.attacks||[]).map(a=>({...a,id:nextAttackId++}));return c}
+function saveCharacterToLibrary(addToEncounter){if(!pendingCharacter)return;const item=JSON.parse(JSON.stringify(pendingCharacter));item.libraryId='char-'+Date.now()+'-'+Math.random().toString(36).slice(2,7);item.side='party';item.attacks=(item.attacks||[]).map((a,i)=>({...a,libraryAttackId:i+1}));characterLibrary.push(item);if(addToEncounter)combatants.push(cloneForEncounter(item,'party'));pendingCharacter=null;$('charImportDialog').close();persist();render();renderLibrary()}
+$('saveCharLibrary').onclick=()=>saveCharacterToLibrary(false);
+$('saveAddChar').onclick=()=>saveCharacterToLibrary(true);
 
 function parseMonsterText(text, url){
   const t=String(text||'').replace(/\u2212/g,'-');
@@ -395,36 +422,27 @@ function parseMonsterText(text, url){
   $('ddbPreview').textContent=`Preview: ${c.name} — AC ${c.ac}, HP ${c.hp}, ${c.attacks.length} attack(s) detected. ${multi?'Multiattack text detected; review attack uses.':''} Special abilities require manual review.`;
   return c;
 }
-let pendingDdbMonster=null;
-$('ddbImportBtn').onclick=()=>{$('ddbUrl').value='';$('ddbText').value='';$('ddbPreview').classList.add('hidden');pendingDdbMonster=null;$('ddbDialog').showModal()};
+$('ddbImportBtn').onclick=()=>{$('ddbText').value='';$('ddbPreview').classList.add('hidden');$('monsterImportActions').classList.add('hidden');pendingDdbMonster=null;$('ddbDialog').showModal()};
 $('closeDdb').onclick=()=>$('ddbDialog').close();
-$('tryDdbFetch').onclick=async()=>{
-  const url=$('ddbUrl').value.trim();
-  if(!/^https:\/\/www\.dndbeyond\.com\/monsters\/\d+/i.test(url)){alert('Enter a D&D Beyond monster URL, such as https://www.dndbeyond.com/monsters/5195047-goblin-boss');return;}
-  try{
-    const response=await fetch(url,{mode:'cors'});
-    if(!response.ok)throw Error('The page returned HTTP '+response.status);
-    const html=await response.text(),doc=new DOMParser().parseFromString(html,'text/html');
-    const text=doc.body?.innerText||doc.body?.textContent||'';
-    if(!text)throw Error('No readable stat block was returned.');
-    $('ddbText').value=text;pendingDdbMonster=parseMonsterText(text,url);
-  }catch(err){
-    $('ddbPreview').classList.remove('hidden');
-    $('ddbPreview').textContent='Direct URL retrieval was blocked or unavailable ('+err.message+'). This is a browser security limitation, not necessarily a problem with the public link. Copy the visible stat block from D&D Beyond, paste it below, then click “Parse and preview”.';
-  }
-};
 $('parseDdbText').onclick=()=>{
-  try{
-    const url=$('ddbUrl').value.trim()||'https://www.dndbeyond.com/monsters/imported';
-    pendingDdbMonster=parseMonsterText($('ddbText').value,url);
-    const add=document.createElement('button');add.className='primary';add.textContent='Add monster to encounter';add.style.marginTop='10px';
-    add.onclick=()=>{combatants.push(pendingDdbMonster);pendingDdbMonster=null;$('ddbDialog').close();render()};
-    const old=$('ddbPreview').querySelector('button');if(old)old.remove();
-    $('ddbPreview').appendChild(add);
-  }catch(err){$('ddbPreview').classList.remove('hidden');$('ddbPreview').textContent=err.message}
+  try{pendingDdbMonster=parseMonsterText($('ddbText').value,'pasted stat block');$('ddbPreview').classList.remove('hidden');$('ddbPreview').textContent=`Preview: ${pendingDdbMonster.name} — AC ${pendingDdbMonster.ac}, HP ${pendingDdbMonster.hp}, ${pendingDdbMonster.attacks.length} attack(s) detected. Review Multiattack, bonus actions, reactions, damage riders and special abilities manually.`;$('monsterImportActions').classList.remove('hidden')}
+  catch(err){$('ddbPreview').classList.remove('hidden');$('monsterImportActions').classList.add('hidden');$('ddbPreview').textContent=err.message}
 };
+function saveMonsterToLibrary(addToEncounter){if(!pendingDdbMonster)return;const item=JSON.parse(JSON.stringify(pendingDdbMonster));item.libraryId='mon-'+Date.now()+'-'+Math.random().toString(36).slice(2,7);item.side='monster';monsterLibrary.push(item);if(addToEncounter)combatants.push(cloneForEncounter(item,'monster'));pendingDdbMonster=null;$('ddbDialog').close();persist();render();renderLibrary()}
+$('saveMonsterLibrary').onclick=()=>saveMonsterToLibrary(false);
+$('saveAddMonster').onclick=()=>saveMonsterToLibrary(true);
+function renderLibrary(){
+  const cEl=$('characterLibrary'),mEl=$('monsterLibrary');
+  $('libraryCount').textContent=`${characterLibrary.length+monsterLibrary.length} saved`;
+  cEl.innerHTML=characterLibrary.length?characterLibrary.map(c=>`<div class="library-item"><div><b>${esc(c.name)}</b><div class="meta">AC ${c.ac} · HP ${c.hp} · ${(c.attacks||[]).length} attacks</div></div><div class="library-actions"><button class="small primary" data-libaddchar="${esc(c.libraryId)}">Add to combat</button><button class="small danger" data-libdelchar="${esc(c.libraryId)}">Remove</button></div></div>`).join(''):'<div class="empty">No saved characters yet. Import a character PDF to begin.</div>';
+  mEl.innerHTML=monsterLibrary.length?monsterLibrary.map(m=>`<div class="library-item"><div><b>${esc(m.name)}</b><div class="meta">AC ${m.ac} · HP ${m.hp} · ${(m.attacks||[]).length} attacks</div></div><div class="library-actions"><button class="small primary" data-libaddmon="${esc(m.libraryId)}">Add to combat</button><button class="small danger" data-libdelmon="${esc(m.libraryId)}">Remove</button></div></div>`).join(''):'<div class="empty">No saved monsters yet. Paste a stat block to begin.</div>';
+  document.querySelectorAll('[data-libaddchar]').forEach(b=>b.onclick=()=>{const c=characterLibrary.find(x=>x.libraryId===b.dataset.libaddchar);if(c){combatants.push(cloneForEncounter(c,'party'));persist();render()}});
+  document.querySelectorAll('[data-libdelchar]').forEach(b=>b.onclick=()=>{if(confirm('Remove this character from the saved library? Existing encounter copies will not be removed.')){characterLibrary=characterLibrary.filter(x=>x.libraryId!==b.dataset.libdelchar);persist();renderLibrary()}});
+  document.querySelectorAll('[data-libaddmon]').forEach(b=>b.onclick=()=>{const m=monsterLibrary.find(x=>x.libraryId===b.dataset.libaddmon);if(m){combatants.push(cloneForEncounter(m,'monster'));persist();render()}});
+  document.querySelectorAll('[data-libdelmon]').forEach(b=>b.onclick=()=>{if(confirm('Remove this monster from the saved library? Existing encounter copies will not be removed.')){monsterLibrary=monsterLibrary.filter(x=>x.libraryId!==b.dataset.libdelmon);persist();renderLibrary()}});
+}
 
-loadSaved();render();
+loadSaved();render();renderLibrary();
 })();
 </script>
 </body>
