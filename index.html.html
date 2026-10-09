@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Three-Round Encounter Lab — D&D 2024</title>
+<style>
+:root{color-scheme:dark;--bg:#10141b;--panel:#191f29;--panel2:#202938;--line:#303b4c;--text:#edf2f8;--muted:#aab6c7;--accent:#d8a85d;--blue:#7bb7ff;--red:#ff8e8e;--green:#8ed5ac}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(145deg,#10141b,#151c26 60%,#111720);color:var(--text);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{padding:28px max(18px,calc((100vw - 1220px)/2));border-bottom:1px solid var(--line);background:#111720}
+h1{font-size:clamp(1.65rem,4vw,2.5rem);line-height:1.12;margin:0 0 8px;letter-spacing:-.035em}h1 span{color:var(--accent)}p{margin:.4rem 0;color:var(--muted)}h2{font-size:1.15rem;margin:0 0 12px}h3{font-size:1rem;margin:0 0 8px}
+main{max-width:1220px;margin:auto;padding:20px 16px 60px}.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 20px}
+button,.filebtn{background:var(--panel2);border:1px solid #435067;color:var(--text);border-radius:9px;padding:9px 12px;font:inherit;cursor:pointer}button:hover,.filebtn:hover{border-color:var(--accent)}button.primary{background:#6e4d20;border-color:#a47b3c}button.danger{color:#ffb1b1}button.small{padding:5px 8px;font-size:.85rem}
+input,select,textarea{background:#101720;color:var(--text);border:1px solid #3a4658;border-radius:7px;padding:8px;width:100%;font:inherit;min-width:0}
+input:focus,select:focus,textarea:focus{outline:2px solid #6e94c5;border-color:transparent}label{display:block;font-size:.8rem;color:var(--muted);margin-bottom:4px}.field{min-width:0}.grid{display:grid;gap:10px}.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g4{grid-template-columns:repeat(4,minmax(0,1fr))}.g5{grid-template-columns:repeat(5,minmax(0,1fr))}
+.panel{background:rgba(25,31,41,.96);border:1px solid var(--line);border-radius:14px;padding:16px;margin:0 0 16px;box-shadow:0 10px 25px #00000012}.muted{color:var(--muted);font-size:.88rem}.eyebrow{font-size:.73rem;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);font-weight:700;margin-bottom:5px}
+#roster{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,350px),1fr));gap:14px}.combatant{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:14px}.combatant.party{border-top:3px solid var(--blue)}.combatant.monster{border-top:3px solid var(--red)}.combatant-head{display:flex;justify-content:space-between;gap:10px;align-items:start}.side-tag{font-size:.72rem;border:1px solid var(--line);border-radius:99px;padding:3px 8px;color:var(--muted)}.attacks{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}.attack{background:#111720;border:1px solid #2b3544;border-radius:9px;padding:10px;margin:8px 0}.attack-top{display:flex;justify-content:space-between;align-items:center;gap:8px}.attack-title{font-weight:700}.attack-meta{font-size:.8rem;color:var(--muted)}.round-pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.round-pills span{font-size:.76rem;padding:3px 7px;border-radius:6px;background:#263244;color:#dce8f8}.round-pills .off{opacity:.45;text-decoration:line-through}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.stat{background:#111720;border:1px solid var(--line);padding:12px;border-radius:10px}.stat .value{font-size:1.55rem;font-weight:750;letter-spacing:-.03em}.stat .label{font-size:.78rem;color:var(--muted)}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:620px}th,td{text-align:right;padding:10px;border-bottom:1px solid var(--line);white-space:nowrap}th:first-child,td:first-child{text-align:left}th{color:var(--muted);font-size:.78rem;font-weight:600}.party-text{color:var(--blue)}.monster-text{color:var(--red)}.warning{border-left:3px solid var(--accent);padding:10px 12px;background:#2b251c;border-radius:0 8px 8px 0;color:#f2dfbf;margin-top:10px}.good{color:var(--green)}.bad{color:var(--red)}.bar{height:8px;background:#303947;border-radius:20px;overflow:hidden;margin-top:8px}.bar>div{height:100%;background:var(--accent);width:0%}.subhead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}.hidden{display:none!important}.footnote{font-size:.82rem;color:var(--muted);margin-top:12px}.empty{padding:24px;text-align:center;border:1px dashed var(--line);border-radius:12px;color:var(--muted)}
+dialog{background:var(--panel);color:var(--text);border:1px solid var(--line);border-radius:14px;width:min(700px,calc(100% - 24px));padding:20px;max-height:90vh;overflow:auto}dialog::backdrop{background:#000a}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}.checkrow{display:flex;gap:8px;align-items:center}.checkrow input{width:auto}.tiny{font-size:.76rem}
+@media(max-width:650px){.g2,.g3,.g4,.g5{grid-template-columns:repeat(2,minmax(0,1fr))}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}main{padding:14px 10px 40px}.panel{padding:13px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Dungeon Master's Workshop · 2024 rules</div>
+  <h1>Three-Round <span>Encounter Lab</span></h1>
+  <p>Expected damage, monster abilities, and a practical damage-race forecast — saved locally in your browser.</p>
+</header>
+<main>
+  <section class="panel">
+    <div class="subhead"><div><h2>Encounter setup</h2><p class="muted">Choose the opposing target profile used to estimate each attack.</p></div></div>
+    <div class="grid g4">
+      <div class="field"><label for="partyAC">Party representative AC</label><input id="partyAC" type="number" value="16" min="1" max="40"></div>
+      <div class="field"><label for="partySave">Party representative save bonus</label><input id="partySave" type="number" value="3" min="-5" max="20"></div>
+      <div class="field"><label for="monsterAC">Monster representative AC</label><input id="monsterAC" type="number" value="15" min="1" max="40"></div>
+      <div class="field"><label for="monsterSave">Monster representative save bonus</label><input id="monsterSave" type="number" value="2" min="-5" max="20"></div>
+    </div>
+    <div class="toolbar">
+      <button class="primary" id="addParty">＋ Add character / ally</button>
+      <button class="primary" id="addMonster">＋ Add monster</button>
+      <button id="ddbImportBtn">Import D&D Beyond monster URL</button>
+      <button id="ddbCharImportBtn">Import D&D Beyond character URL</button>
+      <button id="demoBtn">Load example encounter</button>
+      <button id="exportBtn">Export encounter JSON</button>
+      <label class="filebtn">Import JSON<input id="importFile" type="file" accept=".json,application/json" hidden></label>
+      <button id="resetBtn" class="danger">Clear encounter</button>
+    </div>
+    <p class="footnote">Import supports this tool's JSON export. D&amp;D Beyond has no universal, guaranteed character-export format; use the manual editor to copy the relevant stats from a character sheet. Monster URL import tries direct access first; if browser security blocks it, paste the visible stat block text. This local HTML cannot bypass D&amp;D Beyond access controls or cross-origin restrictions.</p>
+  </section>
+
+  <section class="panel">
+    <div class="subhead"><div><h2>Combatants</h2><p class="muted">Edit HP, AC, names and attack basics directly in the cards; use Advanced edit for save DCs, target AC overrides, crit dice and other detailed settings.</p></div><span id="combatantCount" class="side-tag">0 combatants</span></div>
+    <div id="roster"></div>
+    <div id="emptyState" class="empty">No combatants yet. Add your party and then add the monsters they will face.</div>
+  </section>
+
+  <section class="panel">
+    <div class="subhead"><div><h2>Three-round forecast</h2><p class="muted">Attack damage is probability-weighted. The forecast assumes the listed attacks are attempted and targets remain available.</p></div><button id="recalcBtn" class="primary">Recalculate</button></div>
+    <div class="stats">
+      <div class="stat"><div class="label">Party expected damage</div><div class="value party-text" id="partyTotal">0</div><div class="label">across 3 rounds</div></div>
+      <div class="stat"><div class="label">Monster expected damage</div><div class="value monster-text" id="monsterTotal">0</div><div class="label">across 3 rounds</div></div>
+      <div class="stat"><div class="label">Party average / round</div><div class="value" id="partyDPR">0</div><div class="label">expected damage</div></div>
+      <div class="stat"><div class="label">Monster average / round</div><div class="value" id="monsterDPR">0</div><div class="label">expected damage</div></div>
+    </div>
+    <div class="table-wrap" style="margin-top:16px">
+      <table><thead><tr><th>Side / round</th><th>Round 1</th><th>Round 2</th><th>Round 3</th><th>3-round total</th></tr></thead><tbody id="roundTable"></tbody></table>
+    </div>
+    <div class="grid g2" style="margin-top:14px">
+      <div class="stat"><div class="label">Party combined current HP</div><div class="value party-text" id="partyHP">0</div><div class="bar"><div id="partyHPBar"></div></div></div>
+      <div class="stat"><div class="label">Monster combined current HP</div><div class="value monster-text" id="monsterHP">0</div><div class="bar"><div id="monsterHPBar"></div></div></div>
+    </div>
+    <div id="assessment" class="warning" style="margin-top:14px">Add combatants to see a forecast.</div>
+    <p class="footnote">This is a planning estimate, not an official 2024 DMG difficulty rating. It does not yet simulate initiative order, individual targets, healing, concentration, incapacitation, or enemies dying mid-round. Read the burst/control warnings before using the result.</p>
+  </section>
+
+  <section class="panel">
+    <h2>Calculation method & assumptions</h2>
+    <div class="grid g2">
+      <div><h3>Attack rolls</h3><p class="muted">Uses d20 hit probability against target AC, natural 1/20 rules, optional advantage/disadvantage, and extra critical-hit damage dice. Expected damage is the sum of outcome damage × probability.</p></div>
+      <div><h3>Saving throws</h3><p class="muted">Uses save DC versus the representative target save bonus. Choose half damage on a successful save or no damage on a success. Area effects multiply per-target expected damage by the expected number of targets.</p></div>
+      <div><h3>Round schedule</h3><p class="muted">Choose which rounds each attack is used. For recharge abilities, set the expected number of uses by round manually. This makes assumptions explicit instead of falsely treating a recharge power as available every turn.</p></div>
+      <div><h3>Monster encounter model</h3><p class="muted">Monster attacks use the same engine as character attacks, but target party AC/saves. Multiattack is represented by adding each attack separately. Add legendary actions as separate attack entries in the rounds they are expected to occur.</p></div>
+    </div>
+  </section>
+</main>
+
+<dialog id="combatantDialog">
+  <form id="combatantForm" method="dialog">
+    <div class="eyebrow">Combatant editor</div><h2 id="dialogTitle">Add combatant</h2>
+    <input type="hidden" id="editId">
+    <div class="grid g2">
+      <div class="field"><label for="cName">Name</label><input id="cName" required placeholder="e.g. Eldrin or Ogre"></div>
+      <div class="field"><label for="cSide">Side</label><select id="cSide"><option value="party">Party / allies</option><option value="monster">Monsters / enemies</option></select></div>
+      <div class="field"><label for="cHP">Current HP</label><input id="cHP" type="number" min="0" value="30" required></div>
+      <div class="field"><label for="cAC">AC (reference)</label><input id="cAC" type="number" min="1" value="15"></div>
+      <div class="field"><label for="cInit">Initiative (optional)</label><input id="cInit" type="number" value="0"></div>
+      <div class="field"><label for="cNotes">Notes / control / defence</label><input id="cNotes" placeholder="e.g. paralysis, resistance, legendary resistance"></div>
+    </div>
+    <div class="modal-actions"><button type="button" id="cancelCombatant">Cancel</button><button class="primary" type="submit">Save combatant</button></div>
+  </form>
+</dialog>
+
+<dialog id="attackDialog">
+  <form id="attackForm" method="dialog">
+    <div class="eyebrow">Attack / ability editor</div><h2 id="attackDialogTitle">Add attack</h2>
+    <input type="hidden" id="aCombatantId"><input type="hidden" id="aId">
+    <div class="grid g2">
+      <div class="field"><label for="aName">Attack or ability name</label><input id="aName" required placeholder="e.g. Greataxe / Breath Weapon"></div>
+      <div class="field"><label for="aType">Resolution type</label><select id="aType"><option value="attack">Attack roll</option><option value="save">Saving throw</option><option value="auto">Automatic damage</option></select></div>
+      <div class="field"><label for="aDice">Damage dice</label><input id="aDice" value="1d8+3" placeholder="e.g. 2d6+4"></div>
+      <div class="field"><label for="aBonus">Attack bonus (attack roll)</label><input id="aBonus" type="number" value="5"></div>
+      <div class="field"><label for="aAC">Target AC override (optional)</label><input id="aAC" type="number" placeholder="Use encounter target AC"></div>
+      <div class="field"><label for="aDC">Save DC</label><input id="aDC" type="number" value="14"></div>
+      <div class="field"><label for="aSaveBonus">Target save bonus override</label><input id="aSaveBonus" type="number" placeholder="Use encounter target save"></div>
+      <div class="field"><label for="aTargets">Expected targets hit</label><input id="aTargets" type="number" min="0" max="20" step=".5" value="1"></div>
+      <div class="field"><label for="aSaveEffect">Successful save</label><select id="aSaveEffect"><option value="half">Half damage</option><option value="none">No damage</option></select></div>
+      <div class="field"><label for="aCritDice">Extra dice on critical (optional)</label><input id="aCritDice" placeholder="e.g. 1d8"></div>
+    </div>
+    <div class="grid g3" style="margin-top:12px">
+      <div class="field"><label for="aMode">Roll mode</label><select id="aMode"><option value="normal">Normal</option><option value="adv">Advantage</option><option value="dis">Disadvantage</option></select></div>
+      <div class="field"><label for="aCritMin">Critical on d20 roll</label><select id="aCritMin"><option value="20">20</option><option value="19">19–20</option><option value="18">18–20</option></select></div>
+      <div class="field"><label for="aUses">Expected uses per enabled round</label><input id="aUses" type="number" min="0" max="20" step=".25" value="1"></div>
+    </div>
+    <div style="margin-top:14px"><label>Use this attack in which rounds?</label><div class="grid g3">
+      <label class="checkrow"><input id="aR1" type="checkbox" checked> Round 1</label>
+      <label class="checkrow"><input id="aR2" type="checkbox" checked> Round 2</label>
+      <label class="checkrow"><input id="aR3" type="checkbox" checked> Round 3</label>
+    </div></div>
+    <div class="warning">Special ability tip: if a breath weapon replaces Multiattack, disable the normal attacks in the same round. Set expected uses to a fractional value only when deliberately estimating probability-weighted availability; use explicit round scheduling for a conservative plan.</div>
+    <div class="modal-actions"><button type="button" id="cancelAttack">Cancel</button><button class="primary" type="submit">Save attack</button></div>
+  </form>
+</dialog>
+
+<dialog id="charImportDialog">
+  <div class="eyebrow">D&amp;D Beyond character import</div>
+  <h2>Import a character sheet</h2>
+  <div class="field"><label for="charUrl">D&amp;D Beyond character URL</label><input id="charUrl" type="url" placeholder="https://www.dndbeyond.com/characters/..."></div>
+  <div class="toolbar"><button class="primary" id="tryCharFetch">Try URL import</button><button id="closeCharImport">Close</button></div>
+  <p class="muted">A public URL may still be blocked by browser cross-origin security. If that happens, copy the character sheet's visible text and paste it below. Imported attacks are best-effort estimates; check class features, magic items, limited-use powers and spell effects before relying on the result.</p>
+  <div class="field"><label for="charText">Character sheet text (fallback)</label><textarea id="charText" rows="10" placeholder="Character name, Armor Class, Hit Points, Initiative, attacks and spell statistics..."></textarea></div>
+  <div class="modal-actions"><button class="primary" id="parseCharText">Parse and preview</button></div>
+  <div id="charPreview" class="warning hidden"></div>
+</dialog>
+<dialog id="ddbDialog">
+  <div class="eyebrow">D&amp;D Beyond import</div>
+  <h2>Import a monster stat block</h2>
+  <div class="field"><label for="ddbUrl">Public D&amp;D Beyond monster URL</label><input id="ddbUrl" type="url" placeholder="https://www.dndbeyond.com/monsters/5195047-goblin-boss"></div>
+  <div class="toolbar"><button class="primary" id="tryDdbFetch">Try URL import</button><button id="closeDdb">Close</button></div>
+  <p class="muted">If direct retrieval is blocked by browser security, copy the visible monster stat block from D&amp;D Beyond and paste it below. The parser uses the text you provide and shows a review before adding it.</p>
+  <div class="field"><label for="ddbText">Pasted stat block text (fallback)</label><textarea id="ddbText" rows="10" placeholder="Goblin Boss&#10;AC 17&#10;HP 21 (6d6)&#10;..."></textarea></div>
+  <div class="modal-actions"><button class="primary" id="parseDdbText">Parse and preview</button></div>
+  <div id="ddbPreview" class="warning hidden"></div>
+</dialog>
+
+<script>
+(function(){
+'use strict';
+const $=id=>document.getElementById(id);
+let combatants=[], nextId=1, nextAttackId=1;
+const fmt=n=>Number.isFinite(n)?(Math.round(n*10)/10).toLocaleString(undefined,{maximumFractionDigits:1}):'—';
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function parseDice(expr){
+  const s=String(expr||'').replace(/\s+/g,'').toLowerCase();
+  if(!s)return {n:0,s:0,m:0,valid:true};
+  const match=s.match(/^([+-]?\d*d\d+|[+-]?\d+)?((?:[+-]\d*d\d+|[+-]\d+)*)$/);
+  if(!match)return {valid:false};
+  let parts=s.match(/[+-]?[^+-]+/g)||[],n=0,mean=0,valid=true;
+  for(let p of parts){
+    let sign=1;if(p[0]==='+')p=p.slice(1);else if(p[0]==='-'){sign=-1;p=p.slice(1)}
+    if(!p)continue;
+    if(p.includes('d')){let [nn,ss]=p.split('d');nn=nn===''?1:Number(nn);ss=Number(ss);if(!Number.isInteger(nn)||!Number.isInteger(ss)||nn<0||ss<2||nn>100||ss>100){valid=false;break}mean+=sign*nn*(ss+1)/2}
+    else {const v=Number(p);if(!Number.isFinite(v)){valid=false;break}mean+=sign*v}
+  }
+  return {mean,valid};
+}
+function d20Prob(bonus,target,mode,critMin){
+  const outcomes=[];
+  for(let d1=1;d1<=20;d1++){
+    for(let d2=1;d2<=(mode==='normal'?1:20);d2++){
+      let roll=mode==='adv'?Math.max(d1,d2):mode==='dis'?Math.min(d1,d2):d1;
+      if(mode==='normal'&&d2!==1)continue;
+      let p=mode==='normal'?1/20:1/400;
+      let crit=roll>=critMin;
+      let hit=roll===20 || (roll!==1 && roll+bonus>=target);
+      outcomes.push({p,hit,crit:hit&&crit});
+    }
+  }
+  return outcomes;
+}
+function diceOnlyMean(expr){
+  const s=String(expr||'').replace(/\\s+/g,'').toLowerCase();
+  const parts=s.match(/[+-]?[^+-]+/g)||[];
+  let total=0;
+  for(let p of parts){
+    if(p[0]==='+'||p[0]==='-')p=p.slice(1);
+    if(p.includes('d')){let [n,faces]=p.split('d');n=n===''?1:Number(n);faces=Number(faces);if(Number.isFinite(n)&&Number.isFinite(faces)&&n>=0&&faces>=2)total+=n*(faces+1)/2;}
+  }
+  return total;
+}
+function attackExpected(a,side){
+  const type=a.type||'attack', dice=parseDice(a.dice), critDice=parseDice(a.critDice||'0');
+  if(!dice.valid||!critDice.valid)return {damage:0,error:'Invalid dice notation'};
+  const extraCritDice=(a.critDice&&String(a.critDice).trim())?critDice.mean:diceOnlyMean(a.dice);
+  const targets=Math.max(0,Number(a.targets)||0),uses=Math.max(0,Number(a.uses)||0);
+  let per=0;
+  if(type==='auto') per=dice.mean;
+  else if(type==='save'){
+    const bonus=a.saveBonus!==''&&a.saveBonus!=null?Number(a.saveBonus):Number(side==='party'?$ ('partySave').value:$('monsterSave').value);
+    const dc=Number(a.dc)||0, pSuccess=Math.max(0,Math.min(1,(21-(dc-bonus))/20));
+    per=dice.mean*(a.saveEffect==='none'?(1-pSuccess):(1-pSuccess)+pSuccess*.5);
+  }else{
+    const target=a.ac!==''&&a.ac!=null?Number(a.ac):Number(side==='party'?$ ('monsterAC').value:$('partyAC').value);
+    const outcomes=d20Prob(Number(a.bonus)||0,target,a.mode||'normal',Number(a.critMin)||20);
+    per=outcomes.reduce((sum,o)=>sum+o.p*(o.hit?dice.mean+(o.crit?extraCritDice:0):0),0);
+  }
+  return {damage:per*targets*uses,perTarget:per,targets,uses};
+}
+function targetSide(c){return c.side==='party'?'monster':'party'}
+function calc(){
+  const rounds={party:[0,0,0],monster:[0,0,0]},hp={party:0,monster:0},burst={party:0,monster:0},errors=[];
+  for(const c of combatants){
+    hp[c.side]+=Math.max(0,Number(c.hp)||0);
+    for(const a of c.attacks||[]){
+      const result=attackExpected(a,c.side);
+      if(result.error)errors.push(`${c.name}: ${a.name} — ${result.error}`);
+      for(let r=0;r<3;r++)if(a.rounds?.[r])rounds[c.side][r]+=result.damage;
+    }
+  }
+  const totals={party:rounds.party.reduce((a,b)=>a+b,0),monster:rounds.monster.reduce((a,b)=>a+b,0)};
+  const burstRound={party:Math.max(...rounds.party),monster:Math.max(...rounds.monster)};
+  return {rounds,hp,totals,avg:{party:totals.party/3,monster:totals.monster/3},burstRound,errors};
+}
+function render(){
+  $('combatantCount').textContent=`${combatants.length} combatant${combatants.length===1?'':'s'}`;
+  $('emptyState').classList.toggle('hidden',combatants.length>0);
+  $('roster').innerHTML=combatants.map(c=>`
+    <article class="combatant ${c.side}">
+      <div class="combatant-head"><div style="flex:1;min-width:0"><div class="eyebrow">${c.side==='party'?'Party / ally':'Monster / enemy'}</div><div class="grid g3"><div class="field"><label>Name</label><input data-cfield="name" data-cid="${c.id}" value="${esc(c.name)}"></div><div class="field"><label>HP</label><input data-cfield="hp" data-cid="${c.id}" type="number" min="0" value="${c.hp}"></div><div class="field"><label>AC</label><input data-cfield="ac" data-cid="${c.id}" type="number" min="1" value="${c.ac}"></div></div><div class="grid g2" style="margin-top:8px"><div class="field"><label>Initiative</label><input data-cfield="init" data-cid="${c.id}" type="number" value="${c.init||0}"></div><div class="field"><label>Notes</label><input data-cfield="notes" data-cid="${c.id}" value="${esc(c.notes||'')}"></div></div></div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end"><button class="small" data-edit="${c.id}">Full edit</button><button class="small" data-duplicate="${c.id}">＋ Duplicate</button><button class="small" data-addattack="${c.id}">＋ Attack</button><button class="small danger" data-delete="${c.id}">×</button></div></div>
+      <div class="attacks"><h3>Attacks & abilities (${c.attacks.length})</h3>
+      ${c.attacks.length?c.attacks.map(a=>{const x=attackExpected(a,c.side);return `<div class="attack"><div class="attack-top"><span class="attack-title">${esc(a.name)}</span><button class="small" data-editattack="${c.id}:${a.id}">Advanced edit</button><button class="small danger" data-deleteattack="${c.id}:${a.id}">×</button></div><div class="grid g4" style="margin-top:8px"><div class="field"><label>Attack / ability</label><input data-afield="name" data-cid="${c.id}" data-aid="${a.id}" value="${esc(a.name)}"></div><div class="field"><label>Type</label><select data-afield="type" data-cid="${c.id}" data-aid="${a.id}"><option value="attack" ${a.type==='attack'?'selected':''}>Attack roll</option><option value="save" ${a.type==='save'?'selected':''}>Saving throw</option><option value="auto" ${a.type==='auto'?'selected':''}>Auto damage</option></select></div><div class="field"><label>Damage dice</label><input data-afield="dice" data-cid="${c.id}" data-aid="${a.id}" value="${esc(a.dice)}"></div><div class="field"><label>Attack bonus</label><input data-afield="bonus" data-cid="${c.id}" data-aid="${a.id}" type="number" value="${a.bonus??0}"></div><div class="field"><label>Uses / round</label><input data-afield="uses" data-cid="${c.id}" data-aid="${a.id}" type="number" min="0" step=".25" value="${a.uses??1}"></div><div class="field"><label>Expected targets</label><input data-afield="targets" data-cid="${c.id}" data-aid="${a.id}" type="number" min="0" step=".5" value="${a.targets??1}"></div><div class="field"><label>Roll mode</label><select data-afield="mode" data-cid="${c.id}" data-aid="${a.id}"><option value="normal" ${a.mode==='normal'?'selected':''}>Normal</option><option value="adv" ${a.mode==='adv'?'selected':''}>Advantage</option><option value="dis" ${a.mode==='dis'?'selected':''}>Disadvantage</option></select></div><div class="field"><label>Crit on</label><select data-afield="critMin" data-cid="${c.id}" data-aid="${a.id}"><option value="20" ${Number(a.critMin||20)===20?'selected':''}>20</option><option value="19" ${Number(a.critMin)===19?'selected':''}>19–20</option><option value="18" ${Number(a.critMin)===18?'selected':''}>18–20</option></select></div></div><div class="checkrow" style="margin-top:8px">${[0,1,2].map(r=>`<label class="checkrow"><input data-around="${r}" data-cid="${c.id}" data-aid="${a.id}" type="checkbox" ${a.rounds?.[r]?'checked':''}> Round ${r+1}</label>`).join('')}</div><div class="attack-meta" style="margin-top:6px">${fmt(x.damage)} expected damage per enabled round · ${esc(a.type)} · ${esc(a.dice)}</div></div>`}).join(''):'<p class="muted">No attacks added yet.</p>'}
+      </div>
+    </article>`).join('');
+  document.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editCombatant(Number(b.dataset.edit)));
+  document.querySelectorAll('[data-duplicate]').forEach(b=>b.onclick=()=>duplicateCombatant(Number(b.dataset.duplicate)));
+  document.querySelectorAll('[data-delete]').forEach(b=>b.onclick=()=>{combatants=combatants.filter(c=>c.id!==Number(b.dataset.delete));persist();render()});
+  document.querySelectorAll('[data-addattack]').forEach(b=>b.onclick=()=>editAttack(Number(b.dataset.addattack)));
+  document.querySelectorAll('[data-editattack]').forEach(b=>b.onclick=()=>{const [cid,aid]=b.dataset.editattack.split(':').map(Number);editAttack(cid,aid)});
+  document.querySelectorAll('[data-cfield]').forEach(el=>el.addEventListener('change',()=>{const c=combatants.find(x=>x.id===Number(el.dataset.cid));if(!c)return;const k=el.dataset.cfield;c[k]=['hp','ac','init'].includes(k)?(Number(el.value)||0):el.value;render()}));
+  document.querySelectorAll('[data-afield]').forEach(el=>el.addEventListener('change',()=>{const c=combatants.find(x=>x.id===Number(el.dataset.cid)),a=c?.attacks.find(x=>x.id===Number(el.dataset.aid));if(!a)return;const k=el.dataset.afield;a[k]=['bonus','uses','targets','critMin'].includes(k)?(Number(el.value)||0):el.value;render()}));
+  document.querySelectorAll('[data-around]').forEach(el=>el.addEventListener('change',()=>{const c=combatants.find(x=>x.id===Number(el.dataset.cid)),a=c?.attacks.find(x=>x.id===Number(el.dataset.aid));if(!a)return;a.rounds=a.rounds||[true,true,true];a.rounds[Number(el.dataset.around)]=el.checked;render()}));
+  document.querySelectorAll('[data-deleteattack]').forEach(b=>b.onclick=()=>{const [cid,aid]=b.dataset.deleteattack.split(':').map(Number),c=combatants.find(x=>x.id===cid);if(c){c.attacks=c.attacks.filter(a=>a.id!==aid);render()}});
+  const r=calc();
+  $('partyTotal').textContent=fmt(r.totals.party);$('monsterTotal').textContent=fmt(r.totals.monster);
+  $('partyDPR').textContent=fmt(r.avg.party);$('monsterDPR').textContent=fmt(r.avg.monster);
+  $('partyHP').textContent=fmt(r.hp.party);$('monsterHP').textContent=fmt(r.hp.monster);
+  const maxHP=Math.max(1,r.hp.party,r.hp.monster);
+  $('partyHPBar').style.width=(100*r.hp.party/maxHP)+'%';$('monsterHPBar').style.width=(100*r.hp.monster/maxHP)+'%';
+  $('roundTable').innerHTML=['party','monster'].map(side=>`<tr><td class="${side==='party'?'party-text':'monster-text'}">${side==='party'?'Party':'Monsters'}</td>${r.rounds[side].map(v=>`<td>${fmt(v)}</td>`).join('')}<td><b>${fmt(r.totals[side])}</b></td></tr>`).join('')+`<tr><td>Net damage difference</td>${r.rounds.party.map((v,i)=>`<td>${fmt(v-r.rounds.monster[i])}</td>`).join('')}<td><b>${fmt(r.totals.party-r.totals.monster)}</b></td></tr>`;
+  let assessment='';
+  if(!combatants.some(c=>c.side==='party')||!combatants.some(c=>c.side==='monster'))assessment='Add at least one party combatant and one monster to compare the sides.';
+  else if(r.errors.length)assessment='Check these entries: '+r.errors.join('; ');
+  else {
+    const pDamage=r.totals.party,mDamage=r.totals.monster;
+    const pKill=r.hp.monster/Math.max(.1,r.avg.party),mKill=r.hp.party/Math.max(.1,r.avg.monster);
+    const ratio=pDamage/Math.max(1,mDamage);
+    assessment=`Damage race (very rough): party expected ${fmt(pDamage)} damage versus ${fmt(mDamage)} from monsters over three rounds. `+
+      (ratio>1.5?'Raw damage output favours the party.':ratio<.67?'Raw damage output favours the monsters; check for lethal burst potential.':'Raw damage output is relatively close.')+
+      ` If output stayed constant, HP ÷ average DPR suggests ${fmt(pKill)} rounds to deplete monster HP and ${fmt(mKill)} rounds to deplete party HP. `+
+      `Peak round: party ${fmt(r.burstRound.party)}, monsters ${fmt(r.burstRound.monster)}.`;
+    const ratio2=r.burstRound.monster/Math.max(1,r.hp.party);
+    if(ratio2>=.25)assessment+=' Caution: the monster side’s peak round is at least 25% of combined party HP; individual characters may be at much greater risk.';
+  }
+  $('assessment').textContent=assessment;
+  persist();
+}
+function duplicateCombatant(id){
+  const source=combatants.find(c=>c.id===id);if(!source)return;
+  const sameName=combatants.filter(c=>c.side===source.side&&c.name.replace(/ \(\d+\)$/,'')===source.name.replace(/ \(\d+\)$/,'')).length;
+  const baseName=source.name.replace(/ \(\d+\)$/,'');
+  const copy={...JSON.parse(JSON.stringify(source)),id:nextId++,name:`${baseName} (${sameName+1})`,attacks:source.attacks.map(a=>({...a,id:nextAttackId++}))};
+  combatants.push(copy);persist();render();
+}
+function persist(){try{localStorage.setItem('encounterLab2024',JSON.stringify({combatants,nextId,nextAttackId,partyAC:$('partyAC').value,partySave:$('partySave').value,monsterAC:$('monsterAC').value,monsterSave:$('monsterSave').value}))}catch(e){}}
+function loadSaved(){try{const d=JSON.parse(localStorage.getItem('encounterLab2024')||'null');if(d){combatants=d.combatants||[];nextId=d.nextId||1;nextAttackId=d.nextAttackId||1;for(const k of ['partyAC','partySave','monsterAC','monsterSave'])if(d[k]!=null)$(k).value=d[k]}}catch(e){}}
+function editCombatant(id=null){
+  const c=combatants.find(x=>x.id===id);
+  $('dialogTitle').textContent=c?'Edit combatant':'Add combatant';$('editId').value=c?c.id:'';
+  $('cName').value=c?.name||'';$('cSide').value=c?.side||'party';$('cHP').value=c?.hp??30;$('cAC').value=c?.ac??15;$('cInit').value=c?.init??0;$('cNotes').value=c?.notes||'';
+  $('combatantDialog').showModal();
+}
+$('combatantForm').addEventListener('submit',e=>{
+  e.preventDefault();const id=Number($('editId').value)||nextId++;
+  const old=combatants.find(c=>c.id===id);
+  const c={id,name:$('cName').value.trim(),side:$('cSide').value,hp:Number($('cHP').value)||0,ac:Number($('cAC').value)||10,init:Number($('cInit').value)||0,notes:$('cNotes').value.trim(),attacks:old?.attacks||[]};
+  if(old)combatants=combatants.map(x=>x.id===id?c:x);else combatants.push(c);
+  $('combatantDialog').close();render();
+});
+$('cancelCombatant').onclick=()=>$('combatantDialog').close();
+function editAttack(cid,aid=null){
+  const c=combatants.find(x=>x.id===cid),a=c?.attacks.find(x=>x.id===aid);
+  if(!c)return;
+  $('attackDialogTitle').textContent=a?'Edit attack / ability':'Add attack / ability';
+  $('aCombatantId').value=cid;$('aId').value=a?a.id:'';
+  $('aName').value=a?.name||'';$('aType').value=a?.type||'attack';$('aDice').value=a?.dice||'1d8+3';$('aBonus').value=a?.bonus??5;$('aAC').value=a?.ac??'';
+  $('aDC').value=a?.dc??14;$('aSaveBonus').value=a?.saveBonus??'';$('aTargets').value=a?.targets??1;$('aSaveEffect').value=a?.saveEffect||'half';
+  $('aCritDice').value=a?.critDice||'';$('aMode').value=a?.mode||'normal';$('aCritMin').value=a?.critMin||20;$('aUses').value=a?.uses??1;
+  [0,1,2].forEach(r=>{ $('aR'+(r+1)).checked = a ? Boolean(a.rounds?.[r]) : true; });
+  $('attackDialog').showModal();
+}
+$('attackForm').addEventListener('submit',e=>{
+  e.preventDefault();const cid=Number($('aCombatantId').value),c=combatants.find(x=>x.id===cid);if(!c)return;
+  const id=Number($('aId').value)||nextAttackId++;
+  const a={id,name:$('aName').value.trim(),type:$('aType').value,dice:$('aDice').value.trim(),bonus:Number($('aBonus').value)||0,ac:$('aAC').value===''?'':Number($('aAC').value),dc:Number($('aDC').value)||0,saveBonus:$('aSaveBonus').value===''?'':Number($('aSaveBonus').value),targets:Number($('aTargets').value)||0,saveEffect:$('aSaveEffect').value,critDice:$('aCritDice').value.trim(),mode:$('aMode').value,critMin:Number($('aCritMin').value)||20,uses:Number($('aUses').value)||0,rounds:[1,2,3].map(n=>$('aR'+n).checked)};
+  const old=c.attacks.some(x=>x.id===id);c.attacks=old?c.attacks.map(x=>x.id===id?a:x):[...c.attacks,a];
+  $('attackDialog').close();render();
+});
+$('cancelAttack').onclick=()=>$('attackDialog').close();
+$('addParty').onclick=()=>{ $('cSide').value='party';editCombatant() };
+$('addMonster').onclick=()=>{ $('cSide').value='monster';editCombatant();$('cSide').value='monster' };
+['partyAC','partySave','monsterAC','monsterSave'].forEach(id=>$(id).addEventListener('input',render));
+$('recalcBtn').onclick=render;
+$('exportBtn').onclick=()=>{
+  const data={app:'Three-Round Encounter Lab',version:1,ruleset:'D&D 2024 / 5.5e',combatants,nextId,nextAttackId,settings:{partyAC:$('partyAC').value,partySave:$('partySave').value,monsterAC:$('monsterAC').value,monsterSave:$('monsterSave').value}};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download='encounter-lab-2024.json';a.click();URL.revokeObjectURL(url);
+};
+$('importFile').onchange=async e=>{
+  const f=e.target.files[0];if(!f)return;
+  try{const d=JSON.parse(await f.text());if(!Array.isArray(d.combatants))throw Error('This file does not contain a combatants list.');
+    combatants=d.combatants;nextId=d.nextId||Math.max(0,...combatants.map(c=>c.id||0))+1;nextAttackId=d.nextAttackId||Math.max(0,...combatants.flatMap(c=>(c.attacks||[]).map(a=>a.id||0)))+1;
+    const s=d.settings||d;for(const k of ['partyAC','partySave','monsterAC','monsterSave'])if(s[k]!=null)$(k).value=s[k];render();
+  }catch(err){alert('Could not import JSON: '+err.message)}e.target.value='';
+};
+$('resetBtn').onclick=()=>{if(confirm('Clear all combatants from this encounter? Export first if you want to keep a copy.')){combatants=[];nextId=1;nextAttackId=1;render()}};
+$('demoBtn').onclick=()=>{
+  combatants=[
+    {id:nextId++,name:'Fighter (example)',side:'party',hp:38,ac:18,init:2,notes:'Example only — replace with actual character stats.',attacks:[
+      {id:nextAttackId++,name:'Greatsword',type:'attack',dice:'2d6+4',bonus:7,ac:'',dc:14,saveBonus:'',targets:1,saveEffect:'half',critDice:'2d6',mode:'normal',critMin:20,uses:2,rounds:[true,true,true]},
+      {id:nextAttackId++,name:'Burst ability',type:'attack',dice:'2d6+4',bonus:7,ac:'',dc:14,saveBonus:'',targets:1,saveEffect:'half',critDice:'2d6',mode:'normal',critMin:20,uses:1,rounds:[true,false,false]}]},
+    {id:nextId++,name:'Cleric (example)',side:'party',hp:31,ac:17,init:1,notes:'Example only.',attacks:[
+      {id:nextAttackId++,name:'Sacred Flame',type:'save',dice:'2d8',bonus:0,ac:'',dc:14,saveBonus:'',targets:1,saveEffect:'none',critDice:'',mode:'normal',critMin:20,uses:1,rounds:[true,true,true]}]},
+    {id:nextId++,name:'Ogre Brute (example)',side:'monster',hp:85,ac:15,init:0,notes:'Example monster. Slam has been modelled as an alternative attack.',attacks:[
+      {id:nextAttackId++,name:'Slam',type:'attack',dice:'2d8+4',bonus:6,ac:'',dc:15,saveBonus:'',targets:1,saveEffect:'half',critDice:'',mode:'normal',critMin:20,uses:1,rounds:[false,true,true]},
+      {id:nextAttackId++,name:'Thunderous Slam (special)',type:'save',dice:'4d8',bonus:0,ac:'',dc:15,saveBonus:'',targets:2,saveEffect:'half',critDice:'',mode:'normal',critMin:20,uses:1,rounds:[true,false,false]}]}
+  ];render();
+};
+
+function parseCharacterText(text,url){
+  const t=String(text||'').replace(/\u2212/g,'-');
+  const name=(t.match(/(?:Character Name|Name)\s*[:\n]+\s*([^\n]+)/i)||[])[1]?.trim() || (t.match(/(?:^|\n)\s*([A-Z][A-Za-z'’ -]{2,35})\s*(?:\n|$)/)||[])[1]?.trim() || (url.split('/').pop()||'Imported Character').replace(/-/g,' ');
+  const ac=Number((t.match(/(?:Armor Class|\bAC)\s*[:\n ]+([0-9]{1,2})/i)||[])[1]);
+  const hp=Number((t.match(/(?:Hit Point Maximum|Maximum Hit Points|Hit Points|\bHP)\s*[:\n ]+([0-9]{1,3})/i)||[])[1]);
+  if(!ac||!hp)throw Error('Could not find Armor Class and maximum Hit Points. Paste the visible character sheet text, or enter these values manually.');
+  const init=Number((t.match(/Initiative\s*([+-]\d+)/i)||[])[1])||0;
+  const c={id:nextId++,name,side:'party',hp,ac,init,notes:'Imported from D&D Beyond text. Review attacks, spell damage, magic items and limited-use features.',attacks:[]};
+  const add=(name,type,dice,bonus=0,dc=0)=>c.attacks.push({id:nextAttackId++,name,type,dice,bonus,ac:'',dc,saveBonus:'',targets:1,saveEffect:'none',critDice:'',mode:'normal',critMin:20,uses:1,rounds:[true,true,true]});
+  const spellAttack=Number((t.match(/Spell Attack Bonus\s*([+-]\d+)/i)||[])[1]);
+  const saveDC=Number((t.match(/Spell Save DC\s*(\d+)/i)||[])[1]);
+  // Recognize common attack entries from copied sheets; unsupported features remain editable manually.
+  const attackPatterns=[
+    {re:/Eldritch Blast[\s\S]{0,160}?(\d+d\d+(?:\s*[+-]\s*\d+)?)[^\n]*/i,name:'Eldritch Blast'},
+    {re:/(?:Longbow|Shortbow|Heavy Crossbow|Light Crossbow|Hand Crossbow|Dagger|Rapier|Longsword|Greatsword|Greataxe|Quarterstaff|Unarmed Strike)[^\n]{0,100}?(\d+d\d+(?:\s*[+-]\s*\d+)?)/i,name:null}
+  ];
+  const seen=new Set();
+  for(const pat of attackPatterns){const m=t.match(pat.re);if(m){const line=m[0].split('\n')[0];const nm=pat.name||((line.match(/^(Eldritch Blast|Longbow|Shortbow|Heavy Crossbow|Light Crossbow|Hand Crossbow|Dagger|Rapier|Longsword|Greatsword|Greataxe|Quarterstaff|Unarmed Strike)/i)||[])[1]||'Attack');if(!seen.has(nm)){const b=Number((line.match(/[+]([0-9]{1,2})\s*(?:to hit|attack)/i)||[])[1])||spellAttack||0;add(nm,'attack',m[1].replace(/\s+/g,''),b);seen.add(nm)}}}
+  if(spellAttack && /Eldritch Blast/i.test(t) && !seen.has('Eldritch Blast'))add('Eldritch Blast','attack','1d10',spellAttack);
+  $('charPreview').classList.remove('hidden');$('charPreview').textContent=`Preview: ${c.name} — AC ${c.ac}, HP ${c.hp}, initiative ${c.init}; ${c.attacks.length} attack(s) detected. Add missing attacks manually and verify all imported values.`;
+  return c;
+}
+let pendingCharacter=null;
+$('ddbCharImportBtn').onclick=()=>{$('charUrl').value='';$('charText').value='';$('charPreview').classList.add('hidden');pendingCharacter=null;$('charImportDialog').showModal()};
+$('closeCharImport').onclick=()=>$('charImportDialog').close();
+$('tryCharFetch').onclick=async()=>{const url=$('charUrl').value.trim();if(!/^https:\/\/www\.dndbeyond\.com\/characters\//i.test(url)){alert('Enter a D&D Beyond character URL, such as https://www.dndbeyond.com/characters/12345678');return}try{const res=await fetch(url,{mode:'cors'});if(!res.ok)throw Error('HTTP '+res.status);const doc=new DOMParser().parseFromString(await res.text(),'text/html');const txt=doc.body?.innerText||doc.body?.textContent||'';$('charText').value=txt;pendingCharacter=parseCharacterText(txt,url)}catch(err){$('charPreview').classList.remove('hidden');$('charPreview').textContent='Direct URL import was blocked or unavailable ('+err.message+'). Copy the visible character sheet text and paste it below, then choose Parse and preview.'}};
+$('parseCharText').onclick=()=>{try{pendingCharacter=parseCharacterText($('charText').value,$('charUrl').value.trim()||'https://www.dndbeyond.com/characters/imported');const add=document.createElement('button');add.className='primary';add.textContent='Add character to encounter';add.style.marginTop='10px';add.onclick=()=>{combatants.push(pendingCharacter);pendingCharacter=null;$('charImportDialog').close();render()};const prev=$('charPreview');prev.querySelector('button')?.remove();prev.appendChild(add)}catch(err){$('charPreview').classList.remove('hidden');$('charPreview').textContent=err.message}};
+
+function parseMonsterText(text, url){
+  const t=String(text||'').replace(/\u2212/g,'-');
+  const name=(t.match(/(?:^|\n)\s*([A-Z][A-Za-z'’ -]{2,40})\s*(?:\n|$)/)||[])[1]?.trim() || (url.split('/').pop()||'Imported Monster').replace(/-/g,' ');
+  const ac=Number((t.match(/\bAC\s*[: ]\s*(\d+)/i)||[])[1]);
+  const hp=Number((t.match(/\bHP\s*[: ]\s*(\d+)/i)||[])[1]);
+  if(!ac||!hp)throw Error('Could not find both AC and HP. Paste the full visible stat block, including the AC and HP lines.');
+  const c={id:nextId++,name,side:'monster',hp,ac,init:Number((t.match(/\bInitiative\s*([+-]\d+)/i)||[])[1])||0,notes:'Imported from D&D Beyond text. Review attack parsing and special abilities before use.',attacks:[]};
+  const attackRe=/([A-Z][A-Za-z'’ -]{1,35})\.\s*(?:Melee|Ranged)\s+Attack Roll:\s*([+-]\d+)[\s\S]{0,240}?Hit:\s*\d+\s*\((\d+d\d+(?:\s*[+-]\s*\d+)?)\)\s*([A-Za-z]+)\s+damage/gi;
+  let m;
+  while((m=attackRe.exec(t))!==null){
+    c.attacks.push({id:nextAttackId++,name:m[1].trim(),type:'attack',dice:m[3].replace(/\s+/g,''),bonus:Number(m[2]),ac:'',dc:13,saveBonus:'',targets:1,saveEffect:'half',critDice:'',mode:'normal',critMin:20,uses:1,rounds:[true,true,true]});
+  }
+  if(!c.attacks.length){
+    const simpleRe=/([A-Z][A-Za-z'’ -]{1,35})\.\s*[\s\S]{0,180}?(?:Melee|Ranged) Attack Roll:\s*([+-]\d+)[\s\S]{0,180}?Hit:\s*\d+\s*\((\d+d\d+(?:\s*[+-]\s*\d+)?)\)/gi;
+    while((m=simpleRe.exec(t))!==null)c.attacks.push({id:nextAttackId++,name:m[1].trim(),type:'attack',dice:m[3].replace(/\s+/g,''),bonus:Number(m[2]),ac:'',dc:13,saveBonus:'',targets:1,saveEffect:'half',critDice:'',mode:'normal',critMin:20,uses:1,rounds:[true,true,true]});
+  }
+  const multi=(t.match(/Multiattack\.[^\n]*/i)||[])[0];
+  $('ddbPreview').classList.remove('hidden');
+  $('ddbPreview').textContent=`Preview: ${c.name} — AC ${c.ac}, HP ${c.hp}, ${c.attacks.length} attack(s) detected. ${multi?'Multiattack text detected; review attack uses.':''} Special abilities require manual review.`;
+  return c;
+}
+let pendingDdbMonster=null;
+$('ddbImportBtn').onclick=()=>{$('ddbUrl').value='';$('ddbText').value='';$('ddbPreview').classList.add('hidden');pendingDdbMonster=null;$('ddbDialog').showModal()};
+$('closeDdb').onclick=()=>$('ddbDialog').close();
+$('tryDdbFetch').onclick=async()=>{
+  const url=$('ddbUrl').value.trim();
+  if(!/^https:\/\/www\.dndbeyond\.com\/monsters\/\d+/i.test(url)){alert('Enter a D&D Beyond monster URL, such as https://www.dndbeyond.com/monsters/5195047-goblin-boss');return;}
+  try{
+    const response=await fetch(url,{mode:'cors'});
+    if(!response.ok)throw Error('The page returned HTTP '+response.status);
+    const html=await response.text(),doc=new DOMParser().parseFromString(html,'text/html');
+    const text=doc.body?.innerText||doc.body?.textContent||'';
+    if(!text)throw Error('No readable stat block was returned.');
+    $('ddbText').value=text;pendingDdbMonster=parseMonsterText(text,url);
+  }catch(err){
+    $('ddbPreview').classList.remove('hidden');
+    $('ddbPreview').textContent='Direct URL retrieval was blocked or unavailable ('+err.message+'). This is a browser security limitation, not necessarily a problem with the public link. Copy the visible stat block from D&D Beyond, paste it below, then click “Parse and preview”.';
+  }
+};
+$('parseDdbText').onclick=()=>{
+  try{
+    const url=$('ddbUrl').value.trim()||'https://www.dndbeyond.com/monsters/imported';
+    pendingDdbMonster=parseMonsterText($('ddbText').value,url);
+    const add=document.createElement('button');add.className='primary';add.textContent='Add monster to encounter';add.style.marginTop='10px';
+    add.onclick=()=>{combatants.push(pendingDdbMonster);pendingDdbMonster=null;$('ddbDialog').close();render()};
+    const old=$('ddbPreview').querySelector('button');if(old)old.remove();
+    $('ddbPreview').appendChild(add);
+  }catch(err){$('ddbPreview').classList.remove('hidden');$('ddbPreview').textContent=err.message}
+};
+
+loadSaved();render();
+})();
+</script>
+</body>
+</html>
